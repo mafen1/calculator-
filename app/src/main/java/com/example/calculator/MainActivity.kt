@@ -1,92 +1,90 @@
 package com.example.calculator
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Button
-import androidx.lifecycle.MutableLiveData
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.calculator.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    private var number1 = 0
-    private var number2 = 0
-    private var currentButton = ""
+    private lateinit var ViewModel: ViewModel1
     private val TAG = "TAG"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ViewModel = ViewModelProvider(this)[ViewModel1::class.java]
         initButton()
     }
 
-    private fun initButton(){
+    private fun initButton() {
         binding.button0.setOnClickListener {
-            binding.textWorking.text = addNumber(binding.button0.text.toString())
+            binding.textWorking.text = addNumber(0)
 
         }
         binding.button1.setOnClickListener {
-            binding.textWorking.text = addNumber(binding.button1.text.toString())
+            binding.textWorking.text = addNumber(1)
         }
         binding.button2.setOnClickListener {
-            binding.textWorking.text = addNumber(binding.button2.text.toString())
+            binding.textWorking.text = addNumber(2)
         }
         binding.button3.setOnClickListener {
-            binding.textWorking.text = addNumber(binding.button3.text.toString())
+            binding.textWorking.text = addNumber(3)
         }
         binding.button4.setOnClickListener {
-            binding.textWorking.text = addNumber(binding.button4.text.toString())
+            binding.textWorking.text = addNumber(4)
         }
         binding.button5.setOnClickListener {
-            binding.textWorking.text = addNumber(binding.button5.text.toString())
+            binding.textWorking.text = addNumber(5)
         }
         binding.button6.setOnClickListener {
-            binding.textWorking.text = addNumber(binding.button6.text.toString())
+            binding.textWorking.text = addNumber(6)
         }
         binding.button7.setOnClickListener {
-            binding.textWorking.text = addNumber(binding.button7.text.toString())
+            binding.textWorking.text = addNumber(7)
         }
         binding.button8.setOnClickListener {
-            binding.textWorking.text = addNumber(binding.button8.text.toString())
+            binding.textWorking.text = addNumber(8)
         }
         binding.button9.setOnClickListener {
-            binding.textWorking.text = addNumber(binding.button9.text.toString())
+            binding.textWorking.text = addNumber(9)
         }
         binding.buttonClearAll.setOnClickListener {
-           binding.textWorking.text = ""
+            binding.textWorking.text = ""
         }
         binding.buttonPlus.setOnClickListener {
-            number1 = binding.textWorking.text.toString().toInt()
+            ViewModel.number1 = binding.textWorking.text.toString().toInt()
             binding.textWorking.text = ""
-            currentButton = "plus"
+            ViewModel.currentButton = "plus"
         }
-        binding.buttonMinus.setOnClickListener{
-            number1 = binding.textWorking.text.toString().toInt()
+        binding.buttonMinus.setOnClickListener {
+            ViewModel.number1 = binding.textWorking.text.toString().toInt()
             binding.textWorking.text = ""
-            currentButton = "mines"
+            ViewModel.currentButton = "mines"
         }
         binding.buttonMultiplication.setOnClickListener {
-            number1 = binding.textWorking.text.toString().toInt()
+            ViewModel.number1 = binding.textWorking.text.toString().toInt()
             binding.textWorking.text = ""
-            currentButton = "multiplication"
+            ViewModel.currentButton = "multiplication"
         }
         binding.buttonDivision.setOnClickListener {
-            number1 = binding.textWorking.text.toString().toInt()
+            ViewModel.number1 = binding.textWorking.text.toString().toInt()
             binding.textWorking.text = ""
-            currentButton = "division"
+            ViewModel.currentButton = "division"
         }
         binding.buttonPercent.setOnClickListener {
-            number1 = binding.textWorking.text.toString().toInt()
-            currentButton = "percent"
+            ViewModel.number1 = binding.textWorking.text.toString().toInt()
+            ViewModel.currentButton = "percent"
         }
         binding.buttonEquals.setOnClickListener {
-            number2 = binding.textWorking.text.toString().toInt()
-            binding.textResult.text = when(currentButton){
+            ViewModel.number2 = binding.textWorking.text.toString().toInt()
+            binding.textResult.text = when (ViewModel.currentButton) {
                 "mines" -> mines()
                 "plus" -> plus()
-                "multiplication" ->  multiplation()
-                "division" ->  division()
+                "plus" -> Log.d(TAG, "${plus()}")
+                "multiplication" -> multiplation()
+                "division" -> division()
                 "percent" -> percent()
                 else -> {
                     Log.d(TAG, "notWork")
@@ -95,22 +93,28 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-    private fun addNumber(button: String): String{
-        return "${binding.textWorking.text}$button"
+
+    private fun addNumber(num: Int): String {
+        return "${binding.textWorking.text}$num"
     }
-    private fun plus() :Int{
-        return number1 + number2
+
+    private fun plus(): Int {
+        return ViewModel.number1 + ViewModel.number2
     }
-    private fun mines() :Int{
-        return number1 - number2
+
+    private fun mines(): Int {
+        return ViewModel.number1 - ViewModel.number2
     }
-    private fun multiplation() :Int{
-        return number1 * number2
+
+    private fun multiplation(): Int {
+        return ViewModel.number1 * ViewModel.number2
     }
-    private fun division():Int{
-        return number1 / number2
+
+    private fun division(): Int {
+        return ViewModel.number1 / ViewModel.number2
     }
-    private fun percent(): Int{
-        return number1 / 100
+
+    private fun percent(): Int {
+        return ViewModel.number1 / 100
     }
 }
