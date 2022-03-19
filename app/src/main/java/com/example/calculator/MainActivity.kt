@@ -21,8 +21,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initButton()
         initObserves()
+    }
 
+    private fun updateText(text: String) {
+        binding.EdTextWorking.setText("${binding.EdTextWorking.text}$text")
+    }
+
+    private fun initObserves() {
+        viewModel.userInputFirstNumber.observe(this, androidx.lifecycle.Observer {
+            updateText(it)
+            Log.d(TAG, it)
+        })
+
+    }
+    fun initButton(){
         binding.button0.setOnClickListener(this)
         binding.button1.setOnClickListener(this)
         binding.button2.setOnClickListener(this)
@@ -40,21 +54,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.buttonMultiplication.setOnClickListener(this)
         binding.buttonDivision.setOnClickListener(this)
         binding.buttonClearAll.setOnClickListener(this)
-
     }
-
-    private fun updateText(text: String) {
-        binding.EdTextWorking.setText("${binding.EdTextWorking.text}$text")
-    }
-
-    private fun initObserves() {
-        viewModel.userInputFirstNumber.observe(this, androidx.lifecycle.Observer {
-            updateText(it)
-            Log.d(TAG, it)
-        })
-
-    }
-
     override fun onClick(view: View?) {
 
         // стало
@@ -68,8 +68,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.button6 -> updateText("6")
             R.id.button7 -> updateText("7")
             R.id.button8 -> updateText("8")
-
             R.id.button9 -> updateText("9")
+
             R.id.buttonPlus ->{
                 viewModel.choseOperations("+")
                 viewModel.updateText("+")
