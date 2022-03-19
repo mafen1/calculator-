@@ -1,120 +1,104 @@
 package com.example.calculator
 
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.calculator.databinding.ActivityMainBinding
+import com.example.calculator.viewModel.ViewModel
 
-class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
-    private lateinit var ViewModel: ViewModel1
-    private val TAG = "TAG"
+class MainActivity : AppCompatActivity(), View.OnClickListener {
+
+    private val viewModel: ViewModel by viewModels()
+    companion object{
+        lateinit var binding: ActivityMainBinding
+        val TAG = "TAG"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewModel = ViewModelProvider(this)[ViewModel1::class.java]
-        initButton()
-    }
+        initObserves()
 
-    private fun initButton() {
-        binding.button0.setOnClickListener {
-            binding.textWorking.text = addNumber(0)
-
-        }
-        binding.button1.setOnClickListener {
-            binding.textWorking.text = addNumber(1)
-        }
-        binding.button2.setOnClickListener {
-            binding.textWorking.text = addNumber(2)
-        }
-        binding.button3.setOnClickListener {
-            binding.textWorking.text = addNumber(3)
-        }
-        binding.button4.setOnClickListener {
-            binding.textWorking.text = addNumber(4)
-        }
-        binding.button5.setOnClickListener {
-            binding.textWorking.text = addNumber(5)
-        }
-        binding.button6.setOnClickListener {
-            binding.textWorking.text = addNumber(6)
-        }
-        binding.button7.setOnClickListener {
-            binding.textWorking.text = addNumber(7)
-        }
-        binding.button8.setOnClickListener {
-            binding.textWorking.text = addNumber(8)
-        }
-        binding.button9.setOnClickListener {
-            binding.textWorking.text = addNumber(9)
-        }
-        binding.buttonClearAll.setOnClickListener {
-            binding.textWorking.text = ""
-        }
-        binding.buttonPlus.setOnClickListener {
-            ViewModel.number1 = binding.textWorking.text.toString().toInt()
-            binding.textWorking.text = ""
-            ViewModel.currentButton = "plus"
-        }
-        binding.buttonMinus.setOnClickListener {
-            ViewModel.number1 = binding.textWorking.text.toString().toInt()
-            binding.textWorking.text = ""
-            ViewModel.currentButton = "mines"
-        }
-        binding.buttonMultiplication.setOnClickListener {
-            ViewModel.number1 = binding.textWorking.text.toString().toInt()
-            binding.textWorking.text = ""
-            ViewModel.currentButton = "multiplication"
-        }
-        binding.buttonDivision.setOnClickListener {
-            ViewModel.number1 = binding.textWorking.text.toString().toInt()
-            binding.textWorking.text = ""
-            ViewModel.currentButton = "division"
-        }
-        binding.buttonPercent.setOnClickListener {
-            ViewModel.number1 = binding.textWorking.text.toString().toInt()
-            ViewModel.currentButton = "percent"
-        }
-        binding.buttonEquals.setOnClickListener {
-            ViewModel.number2 = binding.textWorking.text.toString().toInt()
-            binding.textResult.text = when (ViewModel.currentButton) {
-                "mines" -> mines()
-                "plus" -> plus()
-                "plus" -> Log.d(TAG, "${plus()}")
-                "multiplication" -> multiplation()
-                "division" -> division()
-                "percent" -> percent()
-                else -> {
-                    Log.d(TAG, "notWork")
-                }
-            }.toString()
-        }
+        binding.button0.setOnClickListener(this)
+        binding.button1.setOnClickListener(this)
+        binding.button2.setOnClickListener(this)
+        binding.button3.setOnClickListener(this)
+        binding.button4.setOnClickListener(this)
+        binding.button5.setOnClickListener(this)
+        binding.button6.setOnClickListener(this)
+        binding.button7.setOnClickListener(this)
+        binding.button8.setOnClickListener(this)
+        binding.button9.setOnClickListener(this)
+        binding.buttonEquals.setOnClickListener(this)
+        binding.buttonPlus.setOnClickListener(this)
+        binding.buttonMinus.setOnClickListener(this)
+        binding.buttonPercent.setOnClickListener(this)
+        binding.buttonMultiplication.setOnClickListener(this)
+        binding.buttonDivision.setOnClickListener(this)
+        binding.buttonClearAll.setOnClickListener(this)
 
     }
 
-    private fun addNumber(num: Int): String {
-        return "${binding.textWorking.text}$num"
+    private fun updateText(text: String) {
+        binding.EdTextWorking.setText("${binding.EdTextWorking.text}$text")
     }
 
-    private fun plus(): Int {
-        return ViewModel.number1 + ViewModel.number2
+    private fun initObserves() {
+        viewModel.userInputFirstNumber.observe(this, androidx.lifecycle.Observer {
+            updateText(it)
+            Log.d(TAG, it)
+        })
+
     }
 
-    private fun mines(): Int {
-        return ViewModel.number1 - ViewModel.number2
-    }
+    override fun onClick(view: View?) {
 
-    private fun multiplation(): Int {
-        return ViewModel.number1 * ViewModel.number2
-    }
+        // стало
+        when (view!!.id) {
+            R.id.button0 -> updateText("0")
+            R.id.button1 -> updateText("1")
+            R.id.button2 -> updateText("2")
+            R.id.button3 -> updateText("3")
+            R.id.button4 -> updateText("4")
+            R.id.button5 -> updateText("5")
+            R.id.button6 -> updateText("6")
+            R.id.button7 -> updateText("7")
+            R.id.button8 -> updateText("8")
 
-    private fun division(): Int {
-        return ViewModel.number1 / ViewModel.number2
+            R.id.button9 -> updateText("9")
+            R.id.buttonPlus ->{
+                viewModel.choseOperations("+")
+                viewModel.updateText("+")
+            }
+            R.id.buttonMinus -> {
+                viewModel.choseOperations("-")
+                viewModel.updateText("-")
+            }
+            R.id.buttonMultiplication -> {
+                viewModel.choseOperations("*")
+                viewModel.updateText("*")
+            }
+            R.id.buttonDivision -> {
+                viewModel.choseOperations("/")
+                viewModel.updateText("/")
+            }
+            R.id.buttonPercent -> {
+                viewModel.choseOperations("%")
+                viewModel.updateText("%")
+            }
+            R.id.buttonClearAll -> {
+                viewModel.clearAll()
+                binding.EdTextWorking.text = "".toString().toEditable()
+            }
+            R.id.buttonEquals -> {
+                viewModel.operations(binding.EdTextWorking.text.toString())
+                binding.textResult.text = viewModel.finalResult.toString()
+            }
+        }
     }
-
-    private fun percent(): Int {
-        return ViewModel.number1 / 100
-    }
+    fun String.toEditable(): Editable =  Editable.Factory.getInstance().newEditable(this)
 }

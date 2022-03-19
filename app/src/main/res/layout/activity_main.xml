@@ -11,12 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textWorking"
+        <EditText
+            android:id="@+id/EdTextWorking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lines="2"
             android:maxLines="2"
+            android:text=""
             android:textSize="25sp"
             android:textAlignment="textEnd"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,13 +43,13 @@
         <Button
             android:id="@+id/buttonClearAll"
             style="@style/buttonOperation"
-            android:text="AC"
+            android:text="@string/ac"
             android:layout_weight="2"/>
 
         <Button
             android:id="@+id/buttonPercent"
             style="@style/buttonOperation"
-            android:text="%" />
+            android:text="@string/percent" />
 
         <Button
             android:id="@+id/buttonDivision"
@@ -132,13 +133,14 @@
             style="@style/buttonNumber"
             android:text="0"
             android:layout_weight="2"/>
+
         <Button
             android:id="@+id/buttonEquals"
             style="@style/buttonOperation"
             android:layout_weight="2"
             android:background="@color/oranje"
-            android:textColor="@color/white"
-            android:text="=" />
+            android:text="="
+            android:textColor="#455A64" />
     </LinearLayout>
 
 </LinearLayout>
